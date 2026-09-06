@@ -32,7 +32,7 @@ export function MenuCategoryNav({ categories }: { categories: MenuCategory[] }) 
   };
 
   return (
-    <div className="sticky top-[88px] z-40 border-y border-line bg-paper/95 backdrop-blur-md">
+    <div className="sticky top-[6.5rem] z-40 border-y border-line bg-paper/95 backdrop-blur-md md:top-[88px]">
       <nav className="mx-auto flex w-full max-w-[1400px] gap-3 overflow-x-auto px-5 py-4 md:px-8 xl:px-12" aria-label="Menu categories">
         {categories.map((category) => (
           <button

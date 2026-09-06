@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main id="main" className="bg-paper pt-28">
+    <main id="main" className="bg-paper pt-32 md:pt-28">
       <PageHeader eyebrow="PHO•NOM1NAL" title="Our Story">
         Vietnamese cooking in Allentown — bowls, baguettes, and coffee made for this neighborhood.
       </PageHeader>

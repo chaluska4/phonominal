@@ -4,7 +4,7 @@ import { restaurant } from "@/data/restaurant";
 
 export function Hero() {
   return (
-    <section className="relative isolate w-full min-h-[88svh] overflow-hidden bg-ink pt-[96px] text-white">
+    <section className="relative isolate w-full min-h-[88svh] overflow-hidden bg-ink pt-[7.5rem] text-white md:pt-[96px]">
       <Image
         src="/images/hero-pho.jpg"
         alt="Steaming bowl of pho with herbs, chili, and Vietnamese iced coffee"

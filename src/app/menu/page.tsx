@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function MenuPage() {
   return (
-    <main id="main" className="bg-paper pt-28">
+    <main id="main" className="bg-paper pt-32 md:pt-28">
       <PageHeader prominent eyebrow="Allentown" title="Menu">
         Pho, bánh mì, vermicelli, and cà phê — hot from the kitchen. Prices as listed.
         Want it vegetarian, or a different protein? Just ask.

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function GalleryPage() {
   return (
-    <main id="main" className="bg-paper pt-28">
+    <main id="main" className="bg-paper pt-32 md:pt-28">
       <PageHeader largeLede eyebrow="From the kitchen" title="Gallery">
         Pho, bánh mì, vermicelli, rice, appetizers, and drinks as they leave the pass.
       </PageHeader>

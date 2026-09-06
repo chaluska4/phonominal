@@ -4,12 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BrandLogo } from "@/components/BrandLogo";
-import { restaurant, navLinks } from "@/data/restaurant";
+import { navLinks } from "@/data/restaurant";
 
 export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -18,17 +17,10 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
-
   return (
     <header
       className={`fixed top-0 right-0 left-0 z-50 w-full bg-paper/96 backdrop-blur-md transition-shadow ${
-        scrolled || open ? "shadow-[0_1px_0_var(--line)]" : ""
+        scrolled ? "shadow-[0_1px_0_var(--line)]" : ""
       }`}
     >
       <a
@@ -37,10 +29,10 @@ export function Navbar() {
       >
         Skip to content
       </a>
-      <div className="flex w-full items-center justify-between gap-6 px-5 py-4 md:px-10 xl:px-12">
+      <div className="flex w-full items-center justify-between gap-3 px-4 py-3 md:px-10 md:py-4 xl:px-12">
         <BrandLogo
-          className="shrink-0"
-          imageClassName="h-12 w-auto max-w-[360px] object-contain object-left md:h-14 md:max-w-[420px] xl:h-16 xl:max-w-[480px]"
+          className="min-w-0 shrink"
+          imageClassName="h-9 w-auto max-w-[min(200px,52vw)] object-contain object-left md:h-14 md:max-w-[420px] xl:h-16 xl:max-w-[480px]"
         />
 
         <nav className="hidden shrink-0 items-center gap-6 lg:gap-8 md:flex" aria-label="Primary">
@@ -70,59 +62,35 @@ export function Navbar() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-2 md:hidden">
-          <a
-            href={`tel:${restaurant.phoneTel}`}
-            className="px-2 py-2 font-display text-base tracking-[0.12em] text-ink uppercase"
-          >
-            Call
-          </a>
-          <a
-            href={restaurant.mapsDirectionsUrl}
-            className="px-2 py-2 font-display text-base tracking-[0.12em] text-ink uppercase"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Directions
-          </a>
-          <button
-            type="button"
-            className="ml-1 flex h-12 w-12 flex-col items-center justify-center gap-1.5 text-ink"
-            aria-expanded={open}
-            aria-controls="mobile-nav"
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((value) => !value)}
-          >
-            <span className={`h-px w-5 bg-current transition ${open ? "translate-y-[3.5px] rotate-45" : ""}`} />
-            <span className={`h-px w-5 bg-current transition ${open ? "opacity-0" : ""}`} />
-            <span className={`h-px w-5 bg-current transition ${open ? "-translate-y-[4.5px] -rotate-45" : ""}`} />
-          </button>
-        </div>
+        <Link
+          href="/menu"
+          className={`shrink-0 px-3.5 py-2 font-display text-sm tracking-[0.14em] uppercase md:hidden ${
+            pathname === "/menu" ? "bg-chili-bright text-white" : "bg-chili text-white"
+          }`}
+        >
+          Menu
+        </Link>
       </div>
 
-      {open ? (
-        <nav id="mobile-nav" className="border-t border-line bg-paper px-5 py-6 md:hidden" aria-label="Mobile">
-          <div className="flex flex-col gap-4">
-            {navLinks.map((link) => (
+      <nav
+        className="grid grid-cols-4 border-t border-line md:hidden"
+        aria-label="Pages"
+      >
+        {navLinks.map((link) => {
+            const active = pathname === link.href;
+            return (
               <Link
                 key={link.href}
                 href={link.href}
-                className="font-display text-lg tracking-[0.16em] text-ink uppercase"
-                onClick={() => setOpen(false)}
+                className={`flex min-h-11 items-center justify-center px-1 font-display text-[13px] tracking-[0.12em] uppercase ${
+                  active ? "bg-chili text-white" : "text-ink"
+                }`}
               >
                 {link.label}
               </Link>
-            ))}
-            <Link
-              href="/menu"
-              className="mt-2 inline-flex w-fit bg-chili px-4 py-2 font-display text-sm tracking-[0.16em] text-white uppercase"
-              onClick={() => setOpen(false)}
-            >
-              View Menu
-            </Link>
-          </div>
-        </nav>
-      ) : null}
+            );
+          })}
+      </nav>
     </header>
   );
 }

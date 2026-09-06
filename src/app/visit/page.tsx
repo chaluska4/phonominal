@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function VisitPage() {
   return (
-    <main id="main" className="bg-paper pt-28">
+    <main id="main" className="bg-paper pt-32 md:pt-28">
       <PageHeader eyebrow="Allentown, PA" title="Visit">
         {restaurant.name} · Vietnamese Cuisine
       </PageHeader>
