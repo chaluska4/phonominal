@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #14110f;
+  --ink-soft: #2a241f;
+  --paper: #f3eee4;
+  --paper-deep: #e7dfd1;
+  --bone: #d8cebd;
+  --chili: #8c1d27;
+  --chili-bright: #b4232c;
+  --ticket: #8a6a3e;
+  --muted: #6b6156;
+  --line: rgba(20, 17, 15, 0.12);
+  --background: var(--paper);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-bone: var(--bone);
+  --color-chili: var(--chili);
+  --color-chili-bright: var(--chili-bright);
+  --color-ticket: var(--ticket);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-figtree);
+  --font-display: var(--font-barlow);
+  --font-serif: var(--font-newsreader);
+  --font-mono: var(--font-plex);
+}
+
+html {
+  scroll-behavior: smooth;
+  width: 100%;
+}
+
+body {
+  display: block;
+  width: 100%;
+  min-width: 100%;
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-figtree), system-ui, sans-serif;
+}
+
+main,
+header,
+footer {
+  width: 100%;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--chili) 22%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--chili);
+  outline-offset: 3px;
+}
+
+.font-display {
+  font-family: var(--font-barlow), sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-newsreader), Georgia, serif;
+}
+
+.price-ticket {
+  font-family: var(--font-plex), ui-monospace, monospace;
+  letter-spacing: 0.02em;
+}
+
+.hairline {
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+  height: 1px;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: rise-in 0.7s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal,
+  .card-lift,
+  .img-zoom {
+    animation: none !important;
+    transition: none !important;
+  }
+}
