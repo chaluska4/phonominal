@@ -4,11 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BrandLogo } from "@/components/BrandLogo";
+import { useCart } from "@/components/order/CartProvider";
 import { navLinks } from "@/data/restaurant";
 
 export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const { count, setCartOpen } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -60,16 +62,32 @@ export function Navbar() {
           >
             View Menu
           </Link>
+          <button
+            type="button"
+            onClick={() => setCartOpen(true)}
+            className="font-display text-lg tracking-[0.14em] uppercase xl:text-xl"
+          >
+            Order{count ? ` (${count})` : ""}
+          </button>
         </nav>
 
-        <Link
-          href="/menu"
-          className={`shrink-0 px-3.5 py-2 font-display text-sm tracking-[0.14em] uppercase md:hidden ${
-            pathname === "/menu" ? "bg-chili-bright text-white" : "bg-chili text-white"
-          }`}
-        >
-          Menu
-        </Link>
+        <div className="flex shrink-0 items-center gap-2 md:hidden">
+          <button
+            type="button"
+            onClick={() => setCartOpen(true)}
+            className="px-2 py-2 font-display text-sm tracking-[0.12em] uppercase"
+          >
+            Order{count ? ` (${count})` : ""}
+          </button>
+          <Link
+            href="/menu"
+            className={`px-3.5 py-2 font-display text-sm tracking-[0.14em] uppercase ${
+              pathname === "/menu" ? "bg-chili-bright text-white" : "bg-chili text-white"
+            }`}
+          >
+            Menu
+          </Link>
+        </div>
       </div>
 
       <nav

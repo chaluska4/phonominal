@@ -3,6 +3,7 @@ import { Barlow_Condensed, Figtree, IBM_Plex_Mono, Newsreader } from "next/font/
 import { Footer } from "@/components/Footer";
 import { LightboxProvider } from "@/components/Lightbox";
 import { Navbar } from "@/components/Navbar";
+import { OrderShell } from "@/components/order/OrderShell";
 import { restaurant } from "@/data/restaurant";
 import { restaurantJsonLd } from "@/lib/jsonld";
 import "./globals.css";
@@ -75,7 +76,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const jsonLd = restaurantJsonLd();
 
   return (
@@ -89,11 +90,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <LightboxProvider>
-          <div className="block w-full min-w-full">
-            <Navbar />
-            {children}
-            <Footer />
-          </div>
+          <OrderShell>
+            <div className="block w-full min-w-full">
+              <Navbar />
+              {children}
+              <Footer />
+            </div>
+          </OrderShell>
         </LightboxProvider>
       </body>
     </html>

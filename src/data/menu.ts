@@ -1,5 +1,24 @@
 export type MenuBadge = "Popular" | "Vegetarian" | "Spicy";
 
+export type ModifierOption = {
+  id: string;
+  name: string;
+  /** Extra charge in dollars. Omit when the kitchen has not confirmed a price. */
+  priceDelta?: number;
+};
+
+export type ModifierGroup = {
+  id: string;
+  name: string;
+  required: boolean;
+  selection: "single" | "multiple";
+  min?: number;
+  max?: number;
+  options: ModifierOption[];
+  /** Preview-only group. Not confirmed restaurant configuration. */
+  demo?: boolean;
+};
+
 export type MenuItem = {
   id: string;
   name: string;
@@ -12,6 +31,8 @@ export type MenuItem = {
   portion?: string;
   layout?: "card" | "row";
   popular?: boolean;
+  orderable?: boolean;
+  modifierGroups?: ModifierGroup[];
 };
 
 export type MenuCategory = {

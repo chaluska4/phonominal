@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { MenuCard } from "@/components/MenuCard";
 import { MenuCategoryNav } from "@/components/MenuCategoryNav";
+import { MobileOrderBar } from "@/components/order/MobileOrderBar";
 import { PageHeader } from "@/components/PageHeader";
 import { menuCategories } from "@/data/menu";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function MenuPage() {
   return (
-    <main id="main" className="bg-paper pt-32 md:pt-28">
+    <main id="main" className="bg-paper pt-32 pb-24 md:pt-28 md:pb-12">
       <PageHeader prominent eyebrow="Allentown" title="Menu">
         Pho, bánh mì, vermicelli, and cà phê — hot from the kitchen. Prices as listed.
         Want it vegetarian, or a different protein? Just ask.
@@ -56,6 +57,7 @@ export default function MenuPage() {
           );
         })}
       </div>
+      <MobileOrderBar />
     </main>
   );
 }

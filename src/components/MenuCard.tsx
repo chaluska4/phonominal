@@ -2,6 +2,7 @@
 
 import { RatioImage } from "@/components/RatioImage";
 import { useLightbox } from "@/components/Lightbox";
+import { AddToOrderButton } from "@/components/order/AddToOrderButton";
 import { formatPrice, type MenuItem } from "@/data/menu";
 
 function Badges({ item }: { item: MenuItem }) {
@@ -39,6 +40,7 @@ export function MenuCard({ item }: { item: MenuItem }) {
           <div className="mt-3">
             <Badges item={item} />
           </div>
+          <AddToOrderButton item={item} />
         </div>
         <p className="price-ticket shrink-0 text-lg text-chili md:text-xl">{formatPrice(item.price)}</p>
       </article>
@@ -83,6 +85,9 @@ export function MenuCard({ item }: { item: MenuItem }) {
         </p>
         <div className="mt-3">
           <Badges item={item} />
+        </div>
+        <div className="mt-auto">
+          <AddToOrderButton item={item} />
         </div>
       </div>
     </article>
