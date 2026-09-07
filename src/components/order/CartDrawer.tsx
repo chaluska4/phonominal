@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { orderingConfig } from "@/data/ordering";
 import { useCart } from "@/components/order/CartProvider";
 import { CartItem } from "@/components/order/CartItem";
@@ -9,7 +10,14 @@ import { OrderSummary } from "@/components/order/OrderSummary";
 import { useBodyLock } from "@/components/order/useBodyLock";
 
 export function CartDrawer() {
-  const { cartOpen, setCartOpen, lines, clearCart } = useCart();
+  const { cartOpen, setCartOpen, lines } = useCart();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  function continueOrdering() {
+    setCartOpen(false);
+    if (pathname !== "/menu") router.push("/menu");
+  }
 
   useBodyLock(cartOpen);
 
@@ -56,16 +64,20 @@ export function CartDrawer() {
         {lines.length ? (
           <div className="border-t border-line px-5 py-4">
             <OrderSummary lines={lines} />
+            <button
+              type="button"
+              className="mt-4 flex w-full items-center justify-center border border-chili bg-paper px-4 py-3 font-display text-[13px] tracking-[0.14em] text-chili uppercase"
+              onClick={continueOrdering}
+            >
+              Continue Ordering
+            </button>
             <Link
               href="/checkout"
-              className="mt-4 flex w-full items-center justify-center bg-chili px-4 py-3 font-display text-[13px] tracking-[0.14em] text-white uppercase hover:bg-chili-bright"
+              className="mt-3 flex w-full items-center justify-center bg-chili px-4 py-3 font-display text-[13px] tracking-[0.14em] text-white uppercase hover:bg-chili-bright"
               onClick={() => setCartOpen(false)}
             >
               Continue to Checkout
             </Link>
-            <button type="button" className="mt-3 w-full text-sm text-muted underline-offset-2 hover:underline" onClick={clearCart}>
-              Clear cart
-            </button>
           </div>
         ) : null}
       </aside>
