@@ -1,26 +1,94 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GoogleG, GoogleStars } from "@/components/icons";
 import { restaurant } from "@/data/restaurant";
-import { reviewPreview, reviews } from "@/data/reviews";
+import { googleReviews, type GoogleReview } from "@/data/reviews";
+
+function initialsFor(name: string) {
+  const parts = name
+    .replace(/\./g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+  return parts
+    .slice(0, 3)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
+
+function ReviewCard({ review }: { review: GoogleReview }) {
+  return (
+    <article className="flex h-full flex-col border border-line bg-paper p-6">
+      <div className="flex items-center gap-3">
+        <span
+          className="grid h-10 w-10 shrink-0 place-items-center border border-line bg-paper-deep font-display text-xs tracking-[0.08em] text-chili"
+          aria-hidden="true"
+        >
+          {initialsFor(review.name)}
+        </span>
+        <div>
+          <p className="font-display text-[13px] tracking-[0.12em] text-ink uppercase">{review.name}</p>
+          {review.localGuide ? <p className="mt-0.5 text-xs text-muted">Local Guide</p> : null}
+        </div>
+      </div>
+      <div className="mt-4">
+        <GoogleStars value={review.rating} />
+      </div>
+      <p className="mt-4 flex-1 text-[1.02rem] leading-7 text-ink-soft">{review.text}</p>
+      <p className="mt-5 text-xs tracking-[0.04em] text-muted">
+        Google Reviews · {review.relativeDate}
+      </p>
+    </article>
+  );
+}
 
 export function ReviewCarousel() {
+  const reviews = googleReviews.reviews;
+  const count = reviews.length;
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const verified = reviews.length > 0;
+  const hovering = useRef(false);
+  const touchX = useRef<number | null>(null);
+  const resumeTimer = useRef<number | null>(null);
+
+  const pauseInteraction = useCallback(() => {
+    setPaused(true);
+    if (resumeTimer.current) window.clearTimeout(resumeTimer.current);
+    resumeTimer.current = window.setTimeout(() => {
+      if (!hovering.current) setPaused(false);
+    }, 10000);
+  }, []);
+
+  const go = useCallback(
+    (direction: number) => {
+      setIndex((current) => (current + direction + count) % count);
+      pauseInteraction();
+    },
+    [count, pauseInteraction],
+  );
 
   useEffect(() => {
-    if (!verified || paused) return;
-    const timer = window.setInterval(() => {
-      setIndex((current) => (current + 1) % reviews.length);
-    }, 5600);
-    return () => window.clearInterval(timer);
-  }, [paused, verified]);
+    return () => {
+      if (resumeTimer.current) window.clearTimeout(resumeTimer.current);
+    };
+  }, []);
 
-  const visible = verified
-    ? [0, 1, 2].map((offset) => reviews[(index + offset) % reviews.length])
-    : [];
+  useEffect(() => {
+    return () => {
+      if (resumeTimer.current) window.clearTimeout(resumeTimer.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (paused) return;
+    const timer = window.setInterval(() => {
+      setIndex((current) => (current + 1) % count);
+    }, 8000);
+    return () => window.clearInterval(timer);
+  }, [count, paused]);
+
+  const visible = [0, 1, 2].map((offset) => reviews[(index + offset) % count]);
 
   return (
     <section className="bg-white px-5 py-16 md:px-8 md:py-20" aria-labelledby="reviews-heading">
@@ -30,22 +98,19 @@ export function ReviewCarousel() {
             <div className="flex items-center gap-3">
               <GoogleG />
               <p className="font-display text-[12px] tracking-[0.22em] text-ink uppercase">
-                {reviewPreview.sourceLabel}
+                {googleReviews.sourceLabel}
               </p>
             </div>
             <h2 id="reviews-heading" className="mt-3 font-display text-4xl tracking-tight uppercase md:text-5xl">
-              {reviewPreview.heading}
+              Google Reviews
             </h2>
-            {verified ? (
-              <p className="mt-3 text-sm text-muted">
-                Verified comments from the restaurant’s Google Business Profile.
-              </p>
-            ) : (
-              <p className="mt-3 text-sm text-muted">
-                <span className="font-display tracking-[0.16em] text-ink uppercase">{reviewPreview.badge}</span>
-                <span className="mt-2 block max-w-xl leading-6">{reviewPreview.summary}</span>
-              </p>
-            )}
+            <p className="mt-3 flex flex-wrap items-center gap-2 text-sm text-ink">
+              <span className="price-ticket text-lg">{googleReviews.rating.toFixed(1)}</span>
+              <GoogleStars value={googleReviews.rating} />
+              <span className="text-muted">
+                {googleReviews.reviewCount} {googleReviews.sourceLabel}
+              </span>
+            </p>
           </div>
           <a
             href={restaurant.googleReviewsUrl}
@@ -53,82 +118,79 @@ export function ReviewCarousel() {
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center border border-ink px-4 py-2.5 font-display text-[12px] tracking-[0.16em] uppercase hover:bg-ink hover:text-white"
           >
-            Read more reviews
+            Read More Google Reviews
           </a>
         </div>
 
-        <div className="mt-10" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-          {verified ? (
-            <>
-              <div className="grid gap-5 md:grid-cols-3">
-                {visible.map((review, slot) => (
-                  <article
-                    key={`${review.id}-${slot}`}
-                    className={`border border-line bg-paper p-6 ${slot > 0 ? "hidden md:block" : ""}`}
-                  >
-                    <GoogleStars value={review.rating} />
-                    <p className="mt-4 min-h-[7.5rem] text-[1.02rem] leading-7 text-ink-soft">
-                      “{review.text}”
-                    </p>
-                    <div className="mt-5 flex items-end justify-between gap-3">
-                      <p className="font-display text-[12px] tracking-[0.16em] text-ink uppercase">
-                        {review.name}
-                      </p>
-                      {review.date ? <p className="text-xs text-muted">{review.date}</p> : null}
-                    </div>
-                  </article>
-                ))}
+        <div
+          className="mt-10"
+          onMouseEnter={() => {
+            hovering.current = true;
+            setPaused(true);
+          }}
+          onMouseLeave={() => {
+            hovering.current = false;
+            setPaused(false);
+          }}
+          onTouchStart={(event) => {
+            touchX.current = event.changedTouches[0]?.clientX ?? null;
+          }}
+          onTouchEnd={(event) => {
+            const start = touchX.current;
+            const end = event.changedTouches[0]?.clientX;
+            touchX.current = null;
+            if (start == null || end == null) return;
+            const delta = start - end;
+            if (Math.abs(delta) < 48) return;
+            go(delta > 0 ? 1 : -1);
+          }}
+        >
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {visible.map((review, slot) => (
+              <div
+                key={`${review.id}-${slot}`}
+                className={slot === 1 ? "hidden md:block" : slot === 2 ? "hidden lg:block" : undefined}
+              >
+                <ReviewCard review={review} />
               </div>
+            ))}
+          </div>
 
-              <div className="mt-6 flex items-center justify-between">
-                <div className="flex gap-2">
-                  {reviews.map((review, reviewIndex) => (
-                    <button
-                      key={review.id}
-                      type="button"
-                      aria-label={`Show review ${reviewIndex + 1}`}
-                      onClick={() => setIndex(reviewIndex)}
-                      className={`h-1.5 w-6 ${reviewIndex === index ? "bg-chili" : "bg-bone"}`}
-                    />
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIndex((current) => (current - 1 + reviews.length) % reviews.length)}
-                    className="border border-line px-3 py-1 font-display text-lg leading-none"
-                    aria-label="Previous review"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIndex((current) => (current + 1) % reviews.length)}
-                    className="border border-line px-3 py-1 font-display text-lg leading-none"
-                    aria-label="Next review"
-                  >
-                    ›
-                  </button>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="grid gap-5 md:grid-cols-3">
-              {[0, 1, 2].map((slot) => (
-                <article
-                  key={slot}
-                  className={`border border-line bg-paper p-6 ${slot > 0 ? "hidden md:block" : ""}`}
-                >
-                  <p className="font-display text-[12px] tracking-[0.16em] text-muted uppercase">
-                    {reviewPreview.cardTitle}
-                  </p>
-                  <p className="mt-4 min-h-[7.5rem] text-[1.02rem] leading-7 text-ink-soft">
-                    {reviewPreview.cardBody}
-                  </p>
-                </article>
+          <div className="mt-6 flex items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-2">
+              {reviews.map((review, reviewIndex) => (
+                <button
+                  key={review.id}
+                  type="button"
+                  aria-label={`Show review from ${review.name}`}
+                  aria-current={reviewIndex === index}
+                  onClick={() => {
+                    setIndex(reviewIndex);
+                    pauseInteraction();
+                  }}
+                  className={`h-1.5 w-6 ${reviewIndex === index ? "bg-chili" : "bg-bone"}`}
+                />
               ))}
             </div>
-          )}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => go(-1)}
+                className="border border-line px-3 py-1 font-display text-lg leading-none"
+                aria-label="Previous review"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                onClick={() => go(1)}
+                className="border border-line px-3 py-1 font-display text-lg leading-none"
+                aria-label="Next review"
+              >
+                ›
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
