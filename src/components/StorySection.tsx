@@ -20,8 +20,8 @@ export function StorySection() {
             Our Story
           </h2>
           <p className="mt-6 text-[1.05rem] leading-8 text-ink-soft">
-            A neighborhood kitchen on Cedar Crest for pho, bánh mì, vermicelli, and
-            Vietnamese coffee — focused, fresh, and made to be eaten here in Allentown.
+            PHO•NOM1NAL is a Vietnamese restaurant on Cedar Crest Blvd in Allentown.
+            Pho, bánh mì, vermicelli, and Vietnamese coffee are on the menu.
           </p>
           <Link
             href="/about"

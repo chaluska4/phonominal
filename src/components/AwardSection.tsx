@@ -25,8 +25,7 @@ export function AwardSection() {
             {award.full}
           </h2>
           <p className="mt-4 max-w-xl text-white/72">
-            A local nod for the bowl that built this kitchen — long-simmered broth,
-            generous cuts, and herbs that still taste like they were picked that morning.
+            Named Best Pho by Lehigh Valley Style in 2026.
           </p>
         </div>
       </div>

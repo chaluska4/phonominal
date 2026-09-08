@@ -6,14 +6,14 @@ import { PageHeader } from "@/components/PageHeader";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "The story of PHO•NOM1NAL, a Vietnamese restaurant on Cedar Crest Blvd in Allentown, PA.",
+    "PHO•NOM1NAL, a Vietnamese restaurant on Cedar Crest Blvd in Allentown, PA.",
 };
 
 export default function AboutPage() {
   return (
     <main id="main" className="bg-paper pt-32 md:pt-28">
       <PageHeader eyebrow="PHO•NOM1NAL" title="Our Story">
-        Vietnamese cooking in Allentown — bowls, baguettes, and coffee made for this neighborhood.
+        A Vietnamese restaurant on Cedar Crest Blvd in Allentown.
       </PageHeader>
 
       <section className="px-5 pb-20 md:px-8">
@@ -35,9 +35,8 @@ export default function AboutPage() {
               {/* PLACEHOLDER_STORY: Replace owner/history copy when restaurant details are provided. */}
               <p className="mt-4">
                 PHO•NOM1NAL is a Vietnamese restaurant at 319 S Cedar Crest Blvd in Allentown.
-                The kitchen is built around pho, bánh mì, vermicelli bowls, rice plates, and
-                Vietnamese coffee — the dishes people come back for during a weekday lunch or a
-                Sunday supper.
+                The menu includes pho, bánh mì, vermicelli bowls, rice plates, appetizers, and
+                Vietnamese drinks.
               </p>
             </div>
             <div>
@@ -45,9 +44,8 @@ export default function AboutPage() {
                 Vietnamese culinary inspiration
               </h2>
               <p className="mt-4">
-                The cooking follows a familiar Vietnamese table: a long-simmered broth, herbs that
-                stay bright, a baguette with snap, and coffee from southern Vietnam served with
-                condensed milk. The menu stays focused so those plates can be made carefully.
+                Owner, family, and kitchen history will be added here once the restaurant provides
+                it.
               </p>
             </div>
             <div>
@@ -55,9 +53,7 @@ export default function AboutPage() {
                 What we focus on
               </h2>
               <p className="mt-4">
-                Pho that tastes like time was spent on the pot. Bánh mì on a homemade baguette.
-                Vermicelli and rice bowls with grilled meat or tofu. A short list of drinks,
-                including cà phê Bảo Lộc and Thai tea.
+                See the menu for current dishes, ingredients, and prices as listed by the restaurant.
               </p>
               <p className="mt-4 font-display text-[12px] tracking-[0.16em] text-muted uppercase">
                 Owner and family history coming soon

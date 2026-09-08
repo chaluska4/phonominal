@@ -9,10 +9,10 @@ export function FeaturedDishes() {
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <p className="font-display text-[12px] tracking-[0.28em] text-chili uppercase">
-              Customer favorites
+              Popular
             </p>
             <h2 className="mt-2 font-display text-4xl tracking-tight uppercase md:text-5xl">
-              Order these first
+              From the menu
             </h2>
           </div>
           <Link
